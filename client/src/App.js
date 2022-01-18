@@ -1,11 +1,4 @@
-import "./App.css";
+import "./assets/App.scss";
+import Routing from "./Routing";
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Hwllo</h1>
-    </div>
-  );
-}
-
-export default App;
+export default Routing;
