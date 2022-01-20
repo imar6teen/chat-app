@@ -1,0 +1,22 @@
+#contact-person {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+  padding: 0 5px;
+  cursor: pointer;
+  border-bottom: 1px solid cornflowerblue;
+  #name {
+    p {
+      font-size: 1rem;
+      margin: 0.5em 0;
+    }
+  }
+}
+
+#contact-person:hover {
+  background: coral;
+}
+
+.contact-person {
+  background: cornflowerblue !important;
+}

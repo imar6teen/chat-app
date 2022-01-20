@@ -1,0 +1,27 @@
+#chat-box {
+  font-size: 1rem;
+  height: 90%;
+  border: 1px solid magenta;
+  .my-chat {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    align-items: flex-end;
+    margin: 5px;
+    border-bottom: 1px solid limegreen;
+    .chat {
+      width: 15em;
+    }
+  }
+  .your-chat {
+    display: flex;
+    text-align: left;
+    margin: 5px;
+    flex-direction: column;
+    border-bottom: 1px solid limegreen;
+    align-items: flex-start;
+    .chat {
+      width: 15em;
+    }
+  }
+}

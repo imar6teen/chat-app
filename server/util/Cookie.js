@@ -19,8 +19,11 @@ class Cookie {
     }
     return undefined;
   }
-  setCookie() {
-    //pass
+  setCookie({ key, value, path = "/", expire }) {
+    const date = new Date();
+    date.setTime(date.getTime() + expire / 60);
+    const expires = "; expires=" + date.toUTCString();
+    return key + "=" + value + expires + "; path=" + path;
   }
 }
 

@@ -7,7 +7,7 @@ class JsonWebToken {
       __dirname + "/../" + "config/" + "private.key",
       "utf-8"
     );
-    this.algorithm = "RS256";
+    this.algorithm = "HS256";
     this.payload = null;
     this.expire = 600000;
   }
@@ -54,7 +54,7 @@ class SignJsonWebToken extends JsonWebToken {
       jwt.sign(
         this.payload,
         this.privateKey,
-        { algorithm: "RS256", expiresIn: this.expire },
+        { algorithm: this.algorithm, expiresIn: this.expire },
         (err, encoded) => {
           if (err) {
             rej(err);

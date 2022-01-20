@@ -1,0 +1,21 @@
+#send-chat {
+  height: 10%;
+  border: 1px solid hotpink;
+  form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    input[type="text"],
+    input[type="submit"] {
+      font-size: 1.3rem;
+      padding: 0.5em;
+      margin: 0 1em;
+    }
+    input[type="text"] {
+      //   width: 100%;
+      flex-grow: 1;
+    }
+  }
+}

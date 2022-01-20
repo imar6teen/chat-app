@@ -30,11 +30,21 @@ io.use(async (socket, next) => {
     if (tokenFromCookie === undefined) {
       const username = socket.handshake.auth.username;
       const password = socket.handshake.auth.password;
+      //username password harus disamakan dengan database terlebih dahulu
+      //ini nanti akan dilakukan setelah sistemnya terintegrasi
+      //dataabase yang mungkin digunakan (mysql, mongo)
       if (username === undefined && password === undefined)
         return next(new Error("Cookie is undefined"));
       signJWT.setPayload({ username: username, password: password });
       const token = await signJWT.sign();
-      console.log(token);
+      const setCookie = cookie.setCookie({
+        key: "jwt",
+        value: token,
+        path: "/",
+        expire: "6000000000",
+      });
+      console.log(setCookie);
+      socket.emit("set cookie", setCookie);
     }
     next();
   } catch (err) {
