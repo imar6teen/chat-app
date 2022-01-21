@@ -41,6 +41,10 @@ io.on("connection", async (socket) => {
     });
     //send remain user to all client
     sender.sendRemainUser(users);
+
+    socket.on("private message", (data) => {
+      console.log(data);
+    });
     disconnectUser.disconnect(() => {
       //setStatus if offline
       users.forEach((element) => {
