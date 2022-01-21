@@ -1,12 +1,5 @@
 import io from "socket.io-client";
 
-//trying to do more OOP
-// class ConnectStatus {
-//   constructor(connect, error) {
-//     this.isConnect = connect;
-//     this.error = error;
-//   }
-// }
 class Sockets {
   constructor() {
     //do singleton for socket so can share each
@@ -36,16 +29,7 @@ class ConnectSocket extends Sockets {
       this.socket.off("connect_error");
     });
   }
-  //trying to do more OOP
-  // connectWoCredential(cb) {
-  //   this.socket.connect();
-  //   this.socket.on("connect", () => {
-  //     cb(new ConnectStatus(this.socket.connected, false));
-  //   });
-  //   this.socket.on("connect_error", (err) => {
-  //     cb(new ConnectStatus(this.socket.connected, err));
-  //   });
-  // }
+
   connectWithCredential(username, password, cb) {
     this.socket.auth = { username, password };
     this.socket.connect();
@@ -63,4 +47,4 @@ class ConnectSocket extends Sockets {
   }
 }
 
-export default ConnectSocket;
+export { ConnectSocket, Sockets };

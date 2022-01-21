@@ -17,6 +17,7 @@
     "dotenv": "^11.0.0",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
+    "redis": "^4.0.2",
     "socket.io": "^4.4.1"
   }
 }

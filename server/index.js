@@ -1,14 +1,11 @@
 require("dotenv").config();
 const http = require("http");
 const { Server } = require("socket.io");
+const AuthMiddleware = require("./controller/AuthMiddleware.js");
 const PORT = process.env.PORT || 8080;
-const cookie = require("./util/Cookie.js");
-const {
-  VerifyJsonWebToken,
-  SignJsonWebToken,
-} = require("./util/JsonWebToken.js");
-const verifyJWT = new VerifyJsonWebToken();
-const signJWT = new SignJsonWebToken();
+const DisconnectUser = require("./util/DisconnectUser.js");
+const Sender = require("./util/Sender.js");
+const User = require("./util/User.js");
 
 const server = http.createServer();
 const io = new Server(server, {
@@ -20,44 +17,43 @@ const io = new Server(server, {
   },
 });
 
-//middleware for auth jwt
-io.use(async (socket, next) => {
-  try {
-    const tokenFromCookie = cookie.getCookie(
-      "jwt",
-      socket.handshake.headers.cookie
-    );
-    if (tokenFromCookie === undefined) {
-      const username = socket.handshake.auth.username;
-      const password = socket.handshake.auth.password;
-      //username password harus disamakan dengan database terlebih dahulu
-      //ini nanti akan dilakukan setelah sistemnya terintegrasi
-      //dataabase yang mungkin digunakan (mysql, mongo)
-      if (username === undefined && password === undefined)
-        return next(new Error("Cookie is undefined"));
-      signJWT.setPayload({ username: username, password: password });
-      const token = await signJWT.sign();
-      const setCookie = cookie.setCookie({
-        key: "jwt",
-        value: token,
-        path: "/",
-        expire: "6000000000",
-      });
-      console.log(setCookie);
-      socket.emit("set cookie", setCookie);
-    }
-    next();
-  } catch (err) {
-    console.error(err);
-  }
-});
+let users = [
+  //isinya instance User.js
+];
 
-io.on("connection", (socket) => {
-  socket.on("disconnect", (reason) => {
-    console.log(
-      `User with ID : ${socket.id} has been disconnected due to ${reason}`
-    );
-  });
+//middleware for auth jwt
+io.use((socket, next) => AuthMiddleware(socket, next));
+
+io.on("connection", async (socket) => {
+  try {
+    //instance sender class
+    const sender = new Sender(io, socket);
+    //instance disconnect user class
+    const disconnectUser = new DisconnectUser(socket);
+    //find user for new object inside users variable
+    const findUser = users.find((element) => element.id === socket.id);
+    if (findUser === undefined) users.push(new User(socket));
+    //setStatus if online
+    users.forEach((element) => {
+      if (element.id === socket.id) {
+        element.setStatus(true);
+      }
+    });
+    //send remain user to all client
+    sender.sendRemainUser(users);
+    disconnectUser.disconnect(() => {
+      //setStatus if offline
+      users.forEach((element) => {
+        if (element.id === socket.id) {
+          element.setStatus(false);
+        }
+      });
+      //send remain user to all client
+      sender.sendRemainUser(users);
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 server.listen(PORT, () => {
