@@ -39,11 +39,20 @@ io.on("connection", async (socket) => {
         element.setStatus(true);
       }
     });
+    const userUnlessYou = users.filter((element) => element.id !== socket.id);
+
     //send remain user to all client
-    sender.sendRemainUser(users);
+    sender.sendRemainUser(userUnlessYou);
+    sender.sendConnectUser(users);
 
     socket.on("private message", (data) => {
-      console.log(data);
+      socket
+        .to(data.to)
+        .emit("private message", {
+          from: socket.id,
+          to: data.to,
+          text: data.text,
+        });
     });
     disconnectUser.disconnect(() => {
       //setStatus if offline
@@ -53,7 +62,7 @@ io.on("connection", async (socket) => {
         }
       });
       //send remain user to all client
-      sender.sendRemainUser(users);
+      sender.sendDisconnectUser(users);
     });
   } catch (err) {
     console.log(err);

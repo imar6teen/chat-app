@@ -9,6 +9,21 @@ class ReceiveMessage {
       cb(users);
     });
   }
+  getPrivateMessage(cb) {
+    this.socket.on("private message", (data) => {
+      cb(data);
+    });
+  }
+  getDisconnectUser(cb) {
+    this.socket.on("disconnect user", (users) => {
+      cb(users);
+    });
+  }
+  getConnectUser(cb) {
+    this.socket.on("connect user", (users) => {
+      cb(users);
+    });
+  }
 }
 
 export default ReceiveMessage;

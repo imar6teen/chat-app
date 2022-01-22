@@ -1,31 +1,34 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { ToUserContext } from "../pages/Chat";
 
-function ChatBox() {
+function ChatBox(props) {
+  const toUserContext = useContext(ToUserContext);
+  const [message, setMessage] = useState([]);
+  useEffect(() => {
+    for (let i = 0; i < toUserContext.users.length; i++) {
+      if (toUserContext.users[i].id === props.toUser) {
+        setMessage(toUserContext.users[i].message);
+      }
+    }
+  }, [toUserContext.users, props.toUser]);
   return (
     <div id="chat-box">
-      <div className="my-chat">
-        <div className="chat">
-          <p>
-            Kau bodo Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Dolore autem obcaecati quis? Amet quasi est repellat magni odit
-            commodi debitis dolorem sunt nihil recusandae iste facere, aperiam
-            id architecto corrupti.
-          </p>
-          <small>10.30</small>
-        </div>
-      </div>
-      <div className="your-chat">
-        <p>Kau yang bodo</p>
-        <small>10.31</small>
-      </div>
-      <div className="my-chat">
-        <p>Kau bodo</p>
-        <small>10.32</small>
-      </div>
-      <div className="your-chat">
-        <p>Kau yang bodo</p>
-        <small>10.33</small>
-      </div>
+      {message.map((msg) => {
+        const timeStamp = new Date();
+        return (
+          <div className={msg.isSelf ? "my-chat" : "your-chat"}>
+            <div className="chat">
+              <p>{msg.text}</p>
+              <small>
+                {timeStamp.toLocaleTimeString(navigator.language, {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </small>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

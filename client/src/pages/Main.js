@@ -3,15 +3,15 @@ import Contact from "../components/Contact.js";
 import SendChat from "../components/SendChat.js";
 import ChatBox from "../components/ChatBox.js";
 
-function Main() {
+function Main(props) {
   return (
     <div id="main">
       <div className="col contact">
-        <Contact />
+        <Contact setToUser={props.setToUser} />
       </div>
       <div className="col chatting">
-        <ChatBox />
-        <SendChat />
+        <ChatBox toUser={props.toUser} />
+        <SendChat toUser={props.toUser} />
       </div>
     </div>
   );

@@ -4,11 +4,19 @@ class Sender {
     this.socket = socket;
   }
   sendRemainUser(users) {
-    this.io.emit("users", users);
+    this.socket.emit("users", users);
   }
 
   sendMessage(from, to, text) {
     //pass
+  }
+
+  sendDisconnectUser(users) {
+    this.socket.broadcast.emit("disconnect user", users);
+  }
+
+  sendConnectUser(users) {
+    this.socket.broadcast.emit("connect user", users);
   }
 }
 
